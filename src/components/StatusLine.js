@@ -6,7 +6,7 @@ export default function StatusLine(props) {
 
   let taskList, tasksForStatus;
 
-  function handleEmpty() {
+  function handleAddEmpty() {
     addEmptyTask(status);
   }
 
@@ -33,6 +33,8 @@ export default function StatusLine(props) {
   return <div className="statusLine">
 <h3>
     {status}
+    {taskList}
+    <button onClick={handleAddEmpty} className="button addTask">+</button>
 </h3>
 
   </div>;
