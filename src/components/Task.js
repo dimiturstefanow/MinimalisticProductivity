@@ -13,16 +13,58 @@ export default function Task(props) {
   }
 
   function handleSubmit(event) {
-    
+    event.preventDefault();
+
+    if (formAction === "save") {
+      if (collapsed) {
+        setCollapsed(false);
+      } else {
+        let newTask = {
+          id: task.id,
+          title: event.target.elements.title.value,
+          description: event.target.elements.description.value,
+          urgency: urgencyLevel,
+          status: task.status,
+          isCollapsed: true,
+        };
+        addTask(newTask);
+        setCollapsed(true);
+      }
+    }
+    if (formAction === "delete") {
+      deleteTask(task.id);
+    }
   }
 
-  function handleMoveLeft() {}
+  function handleMoveLeft() {
+    let newStatus = "";
 
-  function handleMoveRight() {}
+    if (task.status === "In Progress") {
+      newStatus = "Backlog";
+    } else if (task.status === "Done") {
+      newStatus = "In Progress";
+    }
+    if (newStatus !== "") {
+      moveTask(task.id, newStatus);
+    }
+  }
+
+  function handleMoveRight() {
+    let newStatus = "";
+
+    if (task.status === "Backlog") {
+      newStatus = "In Progress";
+    } else if (task.status === "In Progress") {
+      newStatus = "Done";
+    }
+    if (newStatus !== "") {
+      moveTask(task.id, newStatus);
+    }
+  }
 
   return (
     <div className={`task ${collapsed ? "collapsedTask" : ""}`}>
-      <button onClick={handleMoveLeft} className="button moveTask">
+      <button onClick={handleMoveLeft} className="button moveTask"> 
         &#171;
       </button>
       <form onSubmit={handleSubmit} className={collapsed ? "collapsed" : ""}>
@@ -49,14 +91,16 @@ export default function Task(props) {
               type="radio"
               name="urgency"
             />
+            Low
           </label>
-          <label className={`low ${urgencyLevel === "low" ? "selected" : ""}`}>
+          <label className={`medium ${urgencyLevel === "medium" ? "selected" : ""}`}>
             <input
-              urgency="low"
+              urgency="medium"
               onChange={setUrgency}
               type="radio"
               name="urgency"
             />
+            Medium
           </label>
           <label
             className={`high ${urgencyLevel === "high" ? "selected" : ""}`}
@@ -67,6 +111,7 @@ export default function Task(props) {
               type="radio"
               name="urgency"
             />
+            High
           </label>
         </div>
         <button
@@ -89,7 +134,7 @@ export default function Task(props) {
           </button>
         )}
       </form>
-      <button onClick={handleMoveRight} className="button moveTask">
+      <button onClick={handleMoveRight} className="button moveTask"> 
         &#187;
       </button>
     </div>
